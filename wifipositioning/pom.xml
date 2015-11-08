@@ -9,5 +9,8 @@
   <description>wifipositioning</description>
   <modules>
     <module>wifipositioning-app</module>
+    <module>wifipositioning-service</module>
+    <module>wifipositioning-dao</module>
+    <module>wifipositioning-utils</module>
   </modules>
 </project>
