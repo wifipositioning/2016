@@ -12,5 +12,48 @@
     <module>wifipositioning-service</module>
     <module>wifipositioning-dao</module>
     <module>wifipositioning-utils</module>
+    <module>wifipositioning-model</module>
   </modules>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <wifi.positioning.version>0.0.1-SNAPSHOT</wifi.positioning.version>
+  </properties>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+      	<artifactId>junit</artifactId>
+      	<version>4.12</version>
+      	<scope>test</scope>
+  	</dependency>
+  </dependencies>
+  
+  <dependencyManagement>
+  	<dependencies>
+  	  <dependency>
+  	  	<groupId>io.netty</groupId>
+  	  	<artifactId>netty-all</artifactId>
+  	  	<version>4.0.9.Final</version>
+  	  </dependency>
+		
+	  <!-- WifiPositioning Dependencies -->
+  	  <dependency>
+  	  	  <groupId>com.wifipositioning</groupId>
+  	  	  <artifactId>wifipositioning-service</artifactId>
+  	  	  <version>${wifi.positioning.version}</version>
+  	  </dependency>
+  	  <dependency>
+  	  	  <groupId>com.wifipositioning</groupId>
+  	  	  <artifactId>wifipositioning-model</artifactId>
+  	  	  <version>${wifi.positioning.version}</version>
+  	  </dependency>
+  	  <dependency>
+  	  	  <groupId>com.wifipositioning</groupId>
+  	  	  <artifactId>wifipositioning-utils</artifactId>
+  	  	  <version>${wifi.positioning.version}</version>
+  	  </dependency>
+  	</dependencies>
+  </dependencyManagement>
+  
 </project>
