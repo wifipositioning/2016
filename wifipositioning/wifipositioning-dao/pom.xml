@@ -11,5 +11,17 @@
   <artifactId>wifipositioning-dao</artifactId>
   <name>wifipositioning-dao</name>
   <url>http://maven.apache.org</url>
+  
+  <dependencies>
+  	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+	</dependency>
+	
+	<dependency>
+  	  	<groupId>com.wifipositioning</groupId>
+  	  	<artifactId>wifipositioning-utils</artifactId>
+  	</dependency>
+  </dependencies>
 
 </project>
