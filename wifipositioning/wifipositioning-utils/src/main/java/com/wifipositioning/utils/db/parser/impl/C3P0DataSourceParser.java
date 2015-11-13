@@ -1,4 +1,4 @@
-package com.wifipositioning.utils.db.parser;
+package com.wifipositioning.utils.db.parser.impl;
 
 import java.io.InputStream;
 import java.util.List;
@@ -8,39 +8,35 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.wifipositioning.utils.db.parser.AbstractDataSourceParser;
+
 /**
  * 
- * 数据源解析器
+ * C3P0数据源解析器
  * <br/>
  * 将数据源配置文件中的数据源配置项解析出来
  * 
  * @author liuyujie
  *
  */
-public class DataSourceParser {
+public class C3P0DataSourceParser extends AbstractDataSourceParser {
 	
-	private static final String DATA_SOURCE_FILE_NAME = "/datasource/datasource.xml"; 
-	private static final String ROOT_TAG = "datasource";
-	
-	private static final String DRIVER = "driver";
-	private static final String URL = "url";
-	private static final String USERNAME = "username";
-	private static final String PASSWORD = "password";
+	/**
+	 * 数据源类型标识
+	 */
+	private static final String FLAG_TAG = "c3p0";
+
 	private static final String INITIAL_POOL_SIZE = "initialpoolsize";
 	private static final String MIN_POOL_SIZE = "minpoolsize";
 	private static final String MAX_POOL_SIZE = "maxpoolsize";
 	
-	private String driver = null;
-	private String url = null;
-	private String username = null;
-	private String password = null;
 	private int initialpoolsize = 5;
 	private int minPoolSize = 1;
 	private int maxPoolSize = 10;
 	
-	private static DataSourceParser dataSourceParser = null;
+	private static C3P0DataSourceParser dataSourceParser = null;
 	
-	private DataSourceParser(){
+	private C3P0DataSourceParser(){
 		try {
 			initDataSource();
 		} catch (DocumentException e) {
@@ -48,40 +44,24 @@ public class DataSourceParser {
 		}
 	}
 	
-	public static synchronized DataSourceParser getDataSourceParser(){
+	public static synchronized C3P0DataSourceParser getDataSourceParser(){
 		if(dataSourceParser == null){
-			dataSourceParser = new DataSourceParser();
+			dataSourceParser = new C3P0DataSourceParser();
 		}
 		return dataSourceParser;
 	}
 	
-	private void initDataSource() throws DocumentException{
-		List<Element> dataSourceCfg = parseDataSourceCfg();
-		setDataSourceCfg(dataSourceCfg);
-	}
-	
-	/**
-	 * 解析数据源配置文件
-	 * 
-	 * @return
-	 * @throws DocumentException
-	 */
-	private List<Element> parseDataSourceCfg() throws DocumentException{
-		InputStream dataSourceStream = DataSourceParser.class.getResourceAsStream(DATA_SOURCE_FILE_NAME);
+	public List<Element> parseDataSourceCfg() throws DocumentException{
+		InputStream dataSourceStream = C3P0DataSourceParser.class.getResourceAsStream(DATA_SOURCE_FILE_NAME);
 		SAXReader saxReader = new SAXReader();
 		Document document = saxReader.read(dataSourceStream);
-		Element dataSourceELement = (Element)document.selectSingleNode(ROOT_TAG);
+		Element dataSourceELement = (Element)document.selectSingleNode(ROOT_TAG + "/" + FLAG_TAG);
 		@SuppressWarnings("unchecked")
 		List<Element> dataSourceCfg = dataSourceELement.elements();
 		return dataSourceCfg;
 	}
 	
-	/**
-	 * 将解析出的数据源配置赋值给解析器的对应属性
-	 * 
-	 * @param dataSourceCfg
-	 */
-	private void setDataSourceCfg(List<Element> dataSourceCfg){
+	public void setDataSourceCfg(List<Element> dataSourceCfg){
 		for(Element element : dataSourceCfg){
 			
 			String tagName = element.getName();
@@ -116,27 +96,6 @@ public class DataSourceParser {
 		}
 	}
 	
-	/**
-	 * 重新加载数据源配置
-	 * 
-	 * @throws DocumentException
-	 */
-//	public void reloadDataSource() throws DocumentException{
-//		initDataSource();
-//	}
-	
-	public String getDriver() {
-		return driver;
-	}
-	public String getUrl() {
-		return url;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public String getPassword() {
-		return password;
-	}
 	public int getInitialPoolSize() {
 		return initialpoolsize;
 	}
@@ -147,4 +106,8 @@ public class DataSourceParser {
 		return maxPoolSize;
 	}
 	
+//	public static void main(String[] args) {
+//		C3P0DataSourceParser c3p0 = (C3P0DataSourceParser) C3P0DataSourceParser.getDataSourceParser();
+//		System.out.println(c3p0.getUrl());
+//	}
 }

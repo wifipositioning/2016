@@ -13,6 +13,7 @@
     <module>wifipositioning-dao</module>
     <module>wifipositioning-utils</module>
     <module>wifipositioning-model</module>
+    <module>wifipositioning-manager</module>
   </modules>
   
   <properties>

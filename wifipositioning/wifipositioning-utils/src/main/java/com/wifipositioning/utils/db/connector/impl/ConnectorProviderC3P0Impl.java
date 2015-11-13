@@ -1,11 +1,10 @@
 package com.wifipositioning.utils.db.connector.impl;
 
 import java.beans.PropertyVetoException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.wifipositioning.utils.db.connector.ConnectorProvider;
+import com.wifipositioning.utils.db.connector.AbstractConnectorProvider;
+import com.wifipositioning.utils.db.parser.impl.C3P0DataSourceParser;
 
 /**
  * 
@@ -14,38 +13,30 @@ import com.wifipositioning.utils.db.connector.ConnectorProvider;
  * @author liuyujie
  *
  */
-public class ConnectorProviderC3P0Impl implements ConnectorProvider {
+public class ConnectorProviderC3P0Impl extends AbstractConnectorProvider<C3P0DataSourceParser, ComboPooledDataSource> {
 
 	private static ConnectorProviderC3P0Impl connectorProvider = new ConnectorProviderC3P0Impl();
 	
-	private ComboPooledDataSource dataSource = new ComboPooledDataSource();
-	
 	private ConnectorProviderC3P0Impl(){
 		try {
+			initConnectorProviderC3P0Impl();
 			setDataSourceCfg();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static ConnectorProvider getConnectorProviderInstance(){
-		return connectorProvider;
+	/**
+	 * ConnectorProvider初始化<br/>
+	 * 对数据源解析器和数据源类型初始化操作
+	 */
+	private void initConnectorProviderC3P0Impl(){
+		dataSourceParser = C3P0DataSourceParser.getDataSourceParser();
+		dataSource = new ComboPooledDataSource();
 	}
 	
-	@Override
-	public Connection getConnector() throws SQLException {
-		return dataSource.getConnection();
-	}
-
-	@Override
-	public boolean releaseConnection(Connection connection) {
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+	public static ConnectorProviderC3P0Impl getConnectorProviderInstance(){
+		return connectorProvider;
 	}
 	
 	@Override
@@ -53,10 +44,14 @@ public class ConnectorProviderC3P0Impl implements ConnectorProvider {
 		dataSource.close();
 	}
 	
-	/**
-	 * 配置数据源
+	/* 
+	 * 配置C3P0数据源
+	 * 
+	 * driver  url  username  password initialPoolSize minPoolSize maxPoolSize
+	 *  
+	 * @see com.wifipositioning.utils.db.connector.AbstractConnectorProvider#setDataSourceCfg()
 	 */
-	private void setDataSourceCfg() throws Exception{
+	protected void setDataSourceCfg() throws Exception{
 		String driver = dataSourceParser.getDriver();
 		String url = dataSourceParser.getUrl();
 		String username = dataSourceParser.getUsername();
@@ -77,44 +72,37 @@ public class ConnectorProviderC3P0Impl implements ConnectorProvider {
 		setInitPoolSize(initialPoolSize).setMaxPoolSize(maxPoolSize).setMinPoolSize(minPoolSize);
 	}
 
-	@Override
-	public ConnectorProvider setDriver(String driver) throws PropertyVetoException {
+	private ConnectorProviderC3P0Impl setDriver(String driver) throws PropertyVetoException {
 		dataSource.setDriverClass(driver);
 		return this;
 	}
 
-	@Override
-	public ConnectorProvider setUrl(String url) {
+	private ConnectorProviderC3P0Impl setUrl(String url) {
 		dataSource.setJdbcUrl(url);
 		return this;
 	}
 
-	@Override
-	public ConnectorProvider setUsername(String username) {
+	private ConnectorProviderC3P0Impl setUsername(String username) {
 		dataSource.setUser(username);
 		return this;
 	}
 
-	@Override
-	public ConnectorProvider setPassword(String password) {
+	private ConnectorProviderC3P0Impl setPassword(String password) {
 		dataSource.setPassword(password);
 		return this;
 	}
 
-	@Override
-	public ConnectorProvider setInitPoolSize(int initialPoolSize) {
+	private ConnectorProviderC3P0Impl setInitPoolSize(int initialPoolSize) {
 		dataSource.setInitialPoolSize(initialPoolSize);
 		return this;
 	}
 
-	@Override
-	public ConnectorProvider setMinPoolSize(int minPoolSize) {
+	private ConnectorProviderC3P0Impl setMinPoolSize(int minPoolSize) {
 		dataSource.setMinPoolSize(minPoolSize);
 		return this;
 	}
 
-	@Override
-	public ConnectorProvider setMaxPoolSize(int maxPoolSize) {
+	private ConnectorProviderC3P0Impl setMaxPoolSize(int maxPoolSize) {
 		dataSource.setMaxPoolSize(maxPoolSize);
 		return this;
 	}

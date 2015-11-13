@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datasource>
-	<driver>com.mysql.jdbc.Driver</driver>
-	<url>jdbc:mysql://127.0.0.1:3306/wifipositioning</url>
-	<username>root</username>
-	<password></password>
-	<!-- 连接池初始大小 -->
-	<initialpoolsize>5</initialpoolsize>
-	<minpoolsize>1</minpoolsize>
-	<maxpoolsize>10</maxpoolsize>
+	<c3p0>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<url>jdbc:mysql://127.0.0.1:3306/wifipositioning</url>
+		<username>root</username>
+		<password></password>
+		<!-- 连接池初始大小 -->
+		<initialpoolsize>5</initialpoolsize>
+		<minpoolsize>1</minpoolsize>
+		<maxpoolsize>10</maxpoolsize>
+	</c3p0>
 </datasource>
-<!-- <demo>
-    <database>
-        <driver>com.mysql.jdbc.Driver</driver>
-        <url>jdbc:mysql://127.0.0.1:3306/mysql</url>
-        <username>root</username>
-        <password>123</password>
-    </database>
-</demo> -->

@@ -1,4 +1,4 @@
-package com.wifipositioning.dao;
+package com.wifipositioning.manager;
 
 /**
  * Hello world!
