@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 目前仅仅使用c3p0的数据源和Mysql数据库，可以动态扩展，支持不同的数据源和数据库 -->
 <datasource>
 	<c3p0>
-		<driver>com.mysql.jdbc.Driver</driver>
-		<url>jdbc:mysql://127.0.0.1:3306/wifipositioning</url>
-		<username>root</username>
-		<password></password>
-		<!-- 连接池初始大小 -->
-		<initialpoolsize>5</initialpoolsize>
-		<minpoolsize>1</minpoolsize>
-		<maxpoolsize>10</maxpoolsize>
+		<mysql>
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url>jdbc:mysql://127.0.0.1:3306/wifipositioning</url>
+			<username>root</username>
+			<password></password>
+			<!-- 连接池初始大小 -->
+			<initialpoolsize>5</initialpoolsize>
+			<minpoolsize>1</minpoolsize>
+			<maxpoolsize>10</maxpoolsize>
+		</mysql>
+		<!-- oracle配置仅用于解析测试 -->
+		<oracle>
+			<driver>com.oracle.jdbc.Driver</driver>
+			<url>jdbc:oracle://127.0.0.1:3306/wifipositioning</url>
+			<username>root</username>
+			<password></password>
+			<!-- 连接池初始大小 -->
+			<initialpoolsize>5</initialpoolsize>
+			<minpoolsize>1</minpoolsize>
+			<maxpoolsize>10</maxpoolsize>
+		</oracle>
+		<sqlserver>
+		</sqlserver>
 	</c3p0>
 </datasource>

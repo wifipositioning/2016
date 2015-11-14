@@ -9,6 +9,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.wifipositioning.utils.db.parser.AbstractDataSourceParser;
+import com.wifipositioning.utils.type.db.DbType;
+import com.wifipositioning.utils.type.source.SourceType;
 
 /**
  * 
@@ -20,11 +22,6 @@ import com.wifipositioning.utils.db.parser.AbstractDataSourceParser;
  *
  */
 public class C3P0DataSourceParser extends AbstractDataSourceParser {
-	
-	/**
-	 * 数据源类型标识
-	 */
-	private static final String FLAG_TAG = "c3p0";
 
 	private static final String INITIAL_POOL_SIZE = "initialpoolsize";
 	private static final String MIN_POOL_SIZE = "minpoolsize";
@@ -34,9 +31,16 @@ public class C3P0DataSourceParser extends AbstractDataSourceParser {
 	private int minPoolSize = 1;
 	private int maxPoolSize = 10;
 	
-	private static C3P0DataSourceParser dataSourceParser = null;
+	public C3P0DataSourceParser(){
+		this(DbType.MYSQL);
+	}
 	
-	private C3P0DataSourceParser(){
+	public C3P0DataSourceParser(DbType dbType){
+		
+		this.dbType = dbType;
+		this.sourceType = SourceType.C3P0;
+		this.flagTag = sourceType.getTypeText() + "/" + dbType.getTypeText();
+		
 		try {
 			initDataSource();
 		} catch (DocumentException e) {
@@ -44,18 +48,12 @@ public class C3P0DataSourceParser extends AbstractDataSourceParser {
 		}
 	}
 	
-	public static synchronized C3P0DataSourceParser getDataSourceParser(){
-		if(dataSourceParser == null){
-			dataSourceParser = new C3P0DataSourceParser();
-		}
-		return dataSourceParser;
-	}
-	
 	public List<Element> parseDataSourceCfg() throws DocumentException{
 		InputStream dataSourceStream = C3P0DataSourceParser.class.getResourceAsStream(DATA_SOURCE_FILE_NAME);
 		SAXReader saxReader = new SAXReader();
 		Document document = saxReader.read(dataSourceStream);
-		Element dataSourceELement = (Element)document.selectSingleNode(ROOT_TAG + "/" + FLAG_TAG);
+		Element dataSourceELement = (Element)document.selectSingleNode(ROOT_TAG + "/" + flagTag);
+		System.out.println(flagTag);
 		@SuppressWarnings("unchecked")
 		List<Element> dataSourceCfg = dataSourceELement.elements();
 		return dataSourceCfg;
@@ -106,8 +104,8 @@ public class C3P0DataSourceParser extends AbstractDataSourceParser {
 		return maxPoolSize;
 	}
 	
-//	public static void main(String[] args) {
-//		C3P0DataSourceParser c3p0 = (C3P0DataSourceParser) C3P0DataSourceParser.getDataSourceParser();
-//		System.out.println(c3p0.getUrl());
-//	}
+	public static void main(String[] args) {
+		C3P0DataSourceParser c3p0 = new C3P0DataSourceParser(DbType.ORACLE);
+		System.out.println(c3p0.getUrl());
+	}
 }

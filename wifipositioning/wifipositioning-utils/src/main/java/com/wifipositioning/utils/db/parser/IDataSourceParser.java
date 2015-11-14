@@ -13,15 +13,6 @@ import org.dom4j.Element;
  *
  */
 public interface IDataSourceParser {
-	
-//	/**
-//	 * 生成解析器实例对象
-//	 * 
-//	 * @return 数据源解析器对象
-//	 */
-//	public static Object getDataSourceParser(){
-//		return null;
-//	}
 
 	/**
 	 * 解析数据源配置文件

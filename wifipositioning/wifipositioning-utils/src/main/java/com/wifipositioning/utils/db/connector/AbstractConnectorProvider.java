@@ -44,4 +44,7 @@ public abstract class AbstractConnectorProvider<T extends AbstractDataSourcePars
 		return true;
 	}
 
+	public T getDataSourceParser() {
+		return dataSourceParser;
+	}
 }

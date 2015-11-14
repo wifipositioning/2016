@@ -5,21 +5,24 @@ import java.beans.PropertyVetoException;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.wifipositioning.utils.db.connector.AbstractConnectorProvider;
 import com.wifipositioning.utils.db.parser.impl.C3P0DataSourceParser;
+import com.wifipositioning.utils.type.db.DbType;
 
 /**
  * 
- * 基于C3P0数据源，数据库连接池<br/>以单例形式存在
+ * 基于C3P0数据源，数据库连接池
  * 
  * @author liuyujie
  *
  */
 public class ConnectorProviderC3P0Impl extends AbstractConnectorProvider<C3P0DataSourceParser, ComboPooledDataSource> {
 
-	private static ConnectorProviderC3P0Impl connectorProvider = new ConnectorProviderC3P0Impl();
+	public ConnectorProviderC3P0Impl(){
+		this(DbType.MYSQL);
+	}
 	
-	private ConnectorProviderC3P0Impl(){
+	public ConnectorProviderC3P0Impl(DbType dbType){
 		try {
-			initConnectorProviderC3P0Impl();
+			initConnectorProviderC3P0Impl(dbType);
 			setDataSourceCfg();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -30,13 +33,9 @@ public class ConnectorProviderC3P0Impl extends AbstractConnectorProvider<C3P0Dat
 	 * ConnectorProvider初始化<br/>
 	 * 对数据源解析器和数据源类型初始化操作
 	 */
-	private void initConnectorProviderC3P0Impl(){
-		dataSourceParser = C3P0DataSourceParser.getDataSourceParser();
+	private void initConnectorProviderC3P0Impl(DbType dbType){
+		dataSourceParser = new C3P0DataSourceParser(dbType);
 		dataSource = new ComboPooledDataSource();
-	}
-	
-	public static ConnectorProviderC3P0Impl getConnectorProviderInstance(){
-		return connectorProvider;
 	}
 	
 	@Override
@@ -106,5 +105,5 @@ public class ConnectorProviderC3P0Impl extends AbstractConnectorProvider<C3P0Dat
 		dataSource.setMaxPoolSize(maxPoolSize);
 		return this;
 	}
-
+	
 }
