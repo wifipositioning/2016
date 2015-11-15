@@ -29,7 +29,7 @@ public abstract class AbstractConnectorProvider<T extends AbstractDataSourcePars
 	protected abstract void setDataSourceCfg() throws Exception;
 	
 	@Override
-	public Connection getConnector() throws SQLException {
+	public Connection getConnection() throws SQLException {
 		return dataSource.getConnection();
 	}
 	

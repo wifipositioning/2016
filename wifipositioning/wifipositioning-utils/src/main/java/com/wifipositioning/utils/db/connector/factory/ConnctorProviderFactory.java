@@ -64,7 +64,7 @@ public class ConnctorProviderFactory {
 	 * @param dbType
 	 * @return
 	 */
-	private synchronized ConnectorProviderC3P0Impl createC3P0ConnectorProvider(DbType dbType){
+	private ConnectorProviderC3P0Impl createC3P0ConnectorProvider(DbType dbType){
 		if(c3p0Provider.containsKey(dbType)){
 			return c3p0Provider.get(dbType);
 		}
@@ -81,7 +81,7 @@ public class ConnctorProviderFactory {
 	 * @param dbType
 	 * @return
 	 */
-	private synchronized ConnectorProviderDBCPImpl createDBCPConnectorProvider(DbType dbType){
+	private ConnectorProviderDBCPImpl createDBCPConnectorProvider(DbType dbType){
 		if(dbcpProvider.containsKey(dbType)){
 			return dbcpProvider.get(dbType);
 		}
@@ -95,7 +95,7 @@ public class ConnctorProviderFactory {
 	public static void main(String[] args) throws SQLException {
 		ConnctorProviderFactory connctorProviderFactory = ConnctorProviderFactory.getConnctorProviderFactory();
 		IConnectorProvider connectorProvider = connctorProviderFactory.getConnectorProvider(SourceType.C3P0, DbType.MYSQL);
-		Connection connection = connectorProvider.getConnector();
+		Connection connection = connectorProvider.getConnection();
 		System.out.println(connection);
 		connectorProvider.releaseConnection(connection);
 		System.out.println("closed connection");

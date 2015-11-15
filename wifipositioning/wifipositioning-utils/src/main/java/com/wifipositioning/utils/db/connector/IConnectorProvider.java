@@ -19,7 +19,7 @@ public interface IConnectorProvider {
 	 * @return Connection对象
 	 * @throws SQLException
 	 */
-	public Connection getConnector() throws SQLException;
+	public Connection getConnection() throws SQLException;
 
 	/**
 	 * 
