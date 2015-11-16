@@ -30,7 +30,7 @@ public class ConnectionManager {
 	private SourceType sourceType = null;
 	private DbType dbType = null;
 	
-	public ConnectionManager(SourceType sourceType, DbType dbType) throws SQLException{
+	private ConnectionManager(SourceType sourceType, DbType dbType) throws SQLException{
 		
 		if(sourceType == null || dbType == null){
 			throw new SQLException("Param is Illegal");

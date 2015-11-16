@@ -41,6 +41,8 @@ public class ConnctorProviderFactory {
 	/**
 	 * 
 	 * 根据不同的数据源和数据库类型，得到不同的connector provider
+	 * <br/>
+	 * 对于相同的数据源和数据库类型，只维护一个ConnectorProvider实例
 	 * @param <T>
 	 * @param <E>
 	 * 

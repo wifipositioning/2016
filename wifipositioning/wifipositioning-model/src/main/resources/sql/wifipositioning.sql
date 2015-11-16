@@ -5,8 +5,8 @@ create table fingerprints
 	id varchar(36) not null primary key,
 	mac char(17) not null,
 	rss tinyint not null,
-	x_pos float not null,
-	y_pos float not null
+	x_pos varchar(5) not null,
+	y_pos varchar(5) not null
 );
 
 delimiter //
