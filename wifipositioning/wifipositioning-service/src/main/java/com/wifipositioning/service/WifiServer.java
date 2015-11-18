@@ -1,6 +1,7 @@
 package com.wifipositioning.service;
 
-import com.wifipositioning.service.handler.PosMsgEncoderHandler;
+import com.wifipositioning.service.handler.inbound.ServerInboundHandler;
+import com.wifipositioning.service.handler.inbound.ServerMsgDecoder;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -61,23 +62,29 @@ public class WifiServer
 
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
-				ch.pipeline().addLast(new PosMsgEncoderHandler());
-				serverChannel = ch;
+				ch.pipeline().addLast(new ServerMsgDecoder());
+				ch.pipeline().addLast(new ServerInboundHandler());
+//				serverChannel = ch;
+//				serverChannel.writeAndFlush(new OutboundPositioingInfo(23.4f, 23.4f));
 			}
 		});
         
         try{
         	// Bind and start to accept incoming connections.
-        	ChannelFuture f = b.bind(port).sync();
+        	ChannelFuture future = b.bind(port).sync();
+        	
+        	if(future.isSuccess()){
+        		System.out.println("Server Start Succeed!");
+        	}
         	
         	// Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully
             // shut down your server.
-        	f.channel().closeFuture().sync();
+//        	future.channel().closeFuture().sync();
         }
         finally{
-        	 workerGroup.shutdownGracefully();
-             bossGroup.shutdownGracefully();
+//        	 workerGroup.shutdownGracefully();
+//             bossGroup.shutdownGracefully();
         }
 
     }

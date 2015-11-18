@@ -9,7 +9,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   
-  <groupId>com.wifipositioning</groupId>
   <artifactId>wifipositioning-app</artifactId>
   <name>wifipositioning-app</name>
   <packaging>jar</packaging>

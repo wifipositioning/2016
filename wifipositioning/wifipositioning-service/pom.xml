@@ -7,7 +7,6 @@
     <artifactId>wifipositioning</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.wifipositioning</groupId>
   <artifactId>wifipositioning-service</artifactId>
   <name>wifipositioning-service</name>
   <url>http://maven.apache.org</url>

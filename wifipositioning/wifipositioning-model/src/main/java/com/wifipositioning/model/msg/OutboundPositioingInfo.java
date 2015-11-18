@@ -8,11 +8,11 @@ public class OutboundPositioingInfo {
 		this(0);
 	}
 	
-	public OutboundPositioingInfo(int xPos){
+	public OutboundPositioingInfo(float xPos){
 		this(xPos, 0);
 	}
 	
-	public OutboundPositioingInfo(int xPos, int yPos){
+	public OutboundPositioingInfo(float xPos, float yPos){
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}

@@ -1,12 +1,35 @@
 package com.wifipositioning.model.msg.type;
 
-public enum MsgType {
-	//心跳检测
-	PING, 
+/**
+ * 消息类型
+ * 
+ * @author liuyujie
+ *
+ */
+public class MsgType {
 	
-	//建立数据库
-	CREATE_DB,
+	/**
+	 * 建立连接
+	 */
+	public static final byte CONNECT = 0;
 	
-	//定位请求
-	POSITIONING
+	/**
+	 * 心跳检测
+	 */
+	public static final byte PING = 1;
+	
+	/**
+	 * 建立数据库
+	 */
+	public static final byte CREATE_DB = 2;
+	
+	/**
+	 * 定位请求
+	 */
+	public static final byte POSITIONING = 3;
+	
+	/**
+	 * 释放连接
+	 */
+	public static final byte DISCONNECT = 4;
 }

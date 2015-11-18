@@ -7,6 +7,8 @@ import java.util.Set;
 
 /**
  * MAC RSS 映射关系分离器
+ * <br/>
+ * 格式：mac1|rss1;mac2|rss2;mac3|rss...
  * 
  * @author liuyujie
  *
@@ -17,10 +19,16 @@ public class MacRssMappingSpilter {
 	
 	private static final String VERTICAL_LINE = "\\|";
 	
+	/**
+	 * 将字符串mac-rss字符串分离，以Map的key-value形式返回
+	 * 
+	 * @param macRssStr
+	 * @return
+	 */
 	public static Map<String, Integer> spiltMacRsss(String macRssStr){
 		
 		Map<String, Integer> macRssMappings = new HashMap<String, Integer>();
-		if(macRssMappings != null)
+		if(macRssStr != null && !macRssStr.isEmpty())
 		{
 			String[] macRsss = macRssStr.split(SEMICOLON);
 			for(String macRss : macRsss){

@@ -19,11 +19,16 @@ public class PosMsgEncoderHandler extends MessageToByteEncoder<OutboundPositioin
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, OutboundPositioingInfo msg, ByteBuf out) throws Exception {
+		
+		System.out.println("---enocde begin---");
+		
 		float xPos = msg.getxPos();
 		float yPos = msg.getyPos();
 		
 		out.writeFloat(xPos);
 		out.writeFloat(yPos);
+		
+		System.out.println("---enocde end---");
 		
 	}
 
