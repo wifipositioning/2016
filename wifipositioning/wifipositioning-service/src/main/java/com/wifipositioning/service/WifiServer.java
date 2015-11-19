@@ -2,6 +2,7 @@ package com.wifipositioning.service;
 
 import com.wifipositioning.service.handler.inbound.ServerInboundHandler;
 import com.wifipositioning.service.handler.inbound.ServerMsgDecoder;
+import com.wifipositioning.service.handler.outbound.ServerMsgEncoder;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -24,10 +25,7 @@ public class WifiServer
 	private final int workerThreads = 0;
 	
 	private EventLoopGroup bossGroup = new NioEventLoopGroup(bossThreads);
-    private EventLoopGroup workerGroup = new NioEventLoopGroup(workerThreads); 
-    
-    // 服务端channel连接    
-    private SocketChannel serverChannel;
+    private EventLoopGroup workerGroup = new NioEventLoopGroup(workerThreads);    
     
     public WifiServer() {
     	
@@ -64,8 +62,7 @@ public class WifiServer
 			protected void initChannel(SocketChannel ch) throws Exception {
 				ch.pipeline().addLast(new ServerMsgDecoder());
 				ch.pipeline().addLast(new ServerInboundHandler());
-//				serverChannel = ch;
-//				serverChannel.writeAndFlush(new OutboundPositioingInfo(23.4f, 23.4f));
+				ch.pipeline().addLast(new ServerMsgEncoder());
 			}
 		});
         
@@ -75,6 +72,9 @@ public class WifiServer
         	
         	if(future.isSuccess()){
         		System.out.println("Server Start Succeed!");
+        	}
+        	else{
+        		System.out.println("Server Start Failed!");
         	}
         	
         	// Wait until the server socket is closed.

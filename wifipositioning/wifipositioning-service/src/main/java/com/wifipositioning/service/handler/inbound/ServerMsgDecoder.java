@@ -3,11 +3,11 @@ package com.wifipositioning.service.handler.inbound;
 import java.util.List;
 import java.util.Map;
 
-import com.wifipositioning.model.msg.impl.ConnectMsg;
-import com.wifipositioning.model.msg.impl.CreateDbMsg;
-import com.wifipositioning.model.msg.impl.DisconnectMsg;
-import com.wifipositioning.model.msg.impl.PingMsg;
-import com.wifipositioning.model.msg.impl.WifiPositioningMsg;
+import com.wifipositioning.model.msg.req.impl.ConnectMsg;
+import com.wifipositioning.model.msg.req.impl.CreateDbMsg;
+import com.wifipositioning.model.msg.req.impl.DisconnectMsg;
+import com.wifipositioning.model.msg.req.impl.PingMsg;
+import com.wifipositioning.model.msg.req.impl.WifiPositioningMsg;
 import com.wifipositioning.model.msg.state.MsgState;
 import com.wifipositioning.model.msg.type.MsgType;
 import com.wifipositioning.utils.msg.MacRssMappingSpilter;
@@ -19,7 +19,7 @@ import io.netty.handler.codec.ReplayingDecoder;
 /**
  * 服务端消息解码器
  * <br/>
- * 根据消息类型进行相应的解码处理
+ * 根据消息类型进行相应的解码处理，解码客户端发送给服务端的消息
  * 
  * @author liuyujie
  *
@@ -64,7 +64,6 @@ public class ServerMsgDecoder extends ReplayingDecoder<MsgState> {
 	
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		System.out.println("====in decode===");
 		switch (state()) {
 		case MSG_TYPE:
 			msgType = in.readByte();
@@ -102,11 +101,13 @@ public class ServerMsgDecoder extends ReplayingDecoder<MsgState> {
 		case END:
 			System.out.println(msgType);
 			if(msgType == MsgType.POSITIONING){
+				System.out.println("==== 服务端 解析 客户端 发送的定位请求码流 ====");
 				WifiPositioningMsg wifiPositioningMsg = new WifiPositioningMsg(clientId);
 				wifiPositioningMsg.setRssis(macRssMapping);
 				out.add(wifiPositioningMsg);
 			}
 			else if(msgType == MsgType.CREATE_DB){
+				System.out.println("==== 服务端 解析 客户端 发送的建库请求码流 ====");
 				CreateDbMsg createDbMsg = new CreateDbMsg(clientId);
 				createDbMsg.setRssis(macRssMapping);
 				createDbMsg.setxPos(xPos);
@@ -114,15 +115,18 @@ public class ServerMsgDecoder extends ReplayingDecoder<MsgState> {
 				out.add(createDbMsg);
 			}
 			else if(msgType == MsgType.PING){
+				System.out.println("==== 服务端 解析 客户端 发送的PING请求码流 ====");
 				PingMsg pingMsg = new PingMsg(clientId);
 				out.add(pingMsg);
 			}
 			else if(msgType == MsgType.CONNECT){
+				System.out.println("==== 服务端 解析 客户端 发送的连接请求码流 ====");
 				System.out.println("====Connect===" + clientId);
 				ConnectMsg connectMsg = new ConnectMsg(clientId);
 				out.add(connectMsg);
 			}
 			else if(msgType == MsgType.DISCONNECT){
+				System.out.println("==== 服务端 解析 客户端 发送的连接释放请求码流 ====");
 				DisconnectMsg disconnectMsg = new DisconnectMsg(clientId);
 				out.add(disconnectMsg);
 			}

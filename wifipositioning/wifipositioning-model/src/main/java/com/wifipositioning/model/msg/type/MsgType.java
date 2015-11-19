@@ -32,4 +32,19 @@ public class MsgType {
 	 * 释放连接
 	 */
 	public static final byte DISCONNECT = 4;
+	
+	/**
+	 * 服务端连接响应
+	 */
+	public static final byte CONNECT_ASK = 5;
+	
+	/**
+	 * 服务端建库响应
+	 */
+	public static final byte CREATE_DB_ASK = 6;
+	
+	/**
+	 * 服务端定位响应
+	 */
+	public static final byte POSITIONING_ASK = 7;
 }

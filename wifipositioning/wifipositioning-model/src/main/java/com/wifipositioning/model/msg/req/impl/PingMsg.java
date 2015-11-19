@@ -1,6 +1,6 @@
-package com.wifipositioning.model.msg.impl;
+package com.wifipositioning.model.msg.req.impl;
 
-import com.wifipositioning.model.msg.BaseMsg;
+import com.wifipositioning.model.msg.req.ReqBaseMsg;
 import com.wifipositioning.model.msg.type.MsgType;
 
 /**
@@ -9,7 +9,7 @@ import com.wifipositioning.model.msg.type.MsgType;
  * @author liuyujie
  *
  */
-public class PingMsg extends BaseMsg {
+public class PingMsg extends ReqBaseMsg {
 
 	private static final long serialVersionUID = 8186860591595157979L;
 

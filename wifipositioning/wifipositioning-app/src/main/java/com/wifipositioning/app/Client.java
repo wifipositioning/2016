@@ -1,8 +1,9 @@
 package com.wifipositioning.app;
 
 import com.wifipositioning.app.handler.inbound.ClientInboundHandler;
-import com.wifipositioning.app.handler.outbound.ClientOutboundHandler;
+import com.wifipositioning.app.handler.inbound.ClientMsgDecoder;
 import com.wifipositioning.app.handler.outbound.ClientMsgEncoder;
+import com.wifipositioning.utils.uuid.UUIDGenerator;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -41,7 +42,8 @@ public class Client {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new ClientOutboundHandler());
+                	ch.pipeline().addLast(new ClientMsgDecoder());
+                    ch.pipeline().addLast(new ClientInboundHandler(UUIDGenerator.generateUUID()));
                     ch.pipeline().addLast(new ClientMsgEncoder());
                 	clientChannel = ch;
                 }
@@ -50,7 +52,6 @@ public class Client {
             // Start the client.
             ChannelFuture f = b.connect(host, port).sync(); // (5)
             
-//            clientChannel.writeAndFlush(1024);
             // Wait until the connection is closed.
 //            f.channel().closeFuture().sync();
         } finally {

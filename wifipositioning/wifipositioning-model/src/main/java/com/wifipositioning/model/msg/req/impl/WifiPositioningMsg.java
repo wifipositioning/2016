@@ -1,9 +1,9 @@
-package com.wifipositioning.model.msg.impl;
+package com.wifipositioning.model.msg.req.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wifipositioning.model.msg.BaseMsg;
+import com.wifipositioning.model.msg.req.ReqBaseMsg;
 import com.wifipositioning.model.msg.type.MsgType;
 
 /**
@@ -12,7 +12,7 @@ import com.wifipositioning.model.msg.type.MsgType;
  * @author liuyujie
  *
  */
-public class WifiPositioningMsg extends BaseMsg {
+public class WifiPositioningMsg extends ReqBaseMsg {
 
 	private static final long serialVersionUID = -5796039796385687221L;
 	

@@ -11,11 +11,6 @@ import java.io.Serializable;
 public abstract class BaseMsg implements Serializable{
 
 	private static final long serialVersionUID = -8734170071771365851L;
-
-	/**
-	 * 客户端Id
-	 */
-	private String clientId;
 	
 	/**
 	 * 消息类型 
@@ -23,21 +18,14 @@ public abstract class BaseMsg implements Serializable{
 	private byte msgType;
 	
 	/**
-	 * 消息结束标志
+	 * 消息结束标志位 <code>0</code>
 	 */
 	private byte endFlag = 0;
 	
-	public BaseMsg(String clientId, byte msgType) {
-		this.clientId = clientId;
+	public BaseMsg(byte msgType) {
 		this.msgType = msgType;
 	}
 	
-	public String getClientId() {
-		return clientId;
-	}
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
 	public byte getMsgType() {
 		return msgType;
 	}
@@ -45,6 +33,11 @@ public abstract class BaseMsg implements Serializable{
 		this.msgType = msgType;
 	}
 
+	/**
+	 * 消息结束 <code>byte</code> 标识位
+	 * 
+	 * @return
+	 */
 	public byte getEndFlag() {
 		return endFlag;
 	}
