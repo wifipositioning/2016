@@ -99,6 +99,8 @@ public class ServerMsgDecoder extends ReplayingDecoder<MsgState> {
 			macRssMapping = MacRssMappingSpilter.spiltMacRsss(macRssStr);
 			checkpoint(MsgState.END);
 		case END:
+			// 读走单字节的结束标志位			
+			in.readByte();
 			System.out.println(msgType);
 			if(msgType == MsgType.POSITIONING){
 				System.out.println("==== 服务端 解析 客户端 发送的定位请求码流 ====");

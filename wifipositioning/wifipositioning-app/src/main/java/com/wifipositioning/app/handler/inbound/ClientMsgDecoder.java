@@ -92,6 +92,8 @@ public class ClientMsgDecoder extends ReplayingDecoder<ClientMsgState> {
 			yPos = in.readFloat();
 			checkpoint(ClientMsgState.END);
 		case END:
+			// 读走byte结束标志位			
+			in.readByte();
 			if(msgType == MsgType.POSITIONING_ASK){
 				System.out.println("==== 客户端 解析 服务端 发送的定位响应码流 ====");
 				WifiPositioningAskMsg wpAskMsg = messageLength <= 0 ? new WifiPositioningAskMsg(xPos, yPos, isSuccess) : new WifiPositioningAskMsg(xPos, yPos, isSuccess, message);
