@@ -3,11 +3,11 @@ package com.wifipositioning.service.handler.inbound;
 import java.util.List;
 import java.util.Map;
 
-import com.wifipositioning.model.msg.req.impl.ConnectMsg;
-import com.wifipositioning.model.msg.req.impl.CreateDbMsg;
-import com.wifipositioning.model.msg.req.impl.DisconnectMsg;
-import com.wifipositioning.model.msg.req.impl.PingMsg;
-import com.wifipositioning.model.msg.req.impl.WifiPositioningMsg;
+import com.wifipositioning.model.msg.req.client.impl.ConnectMsg;
+import com.wifipositioning.model.msg.req.client.impl.CreateDbMsg;
+import com.wifipositioning.model.msg.req.client.impl.DisconnectMsg;
+import com.wifipositioning.model.msg.req.client.impl.PingMsg;
+import com.wifipositioning.model.msg.req.client.impl.WifiPositioningMsg;
 import com.wifipositioning.model.msg.state.MsgState;
 import com.wifipositioning.model.msg.type.MsgType;
 import com.wifipositioning.utils.msg.MacRssMappingSpilter;

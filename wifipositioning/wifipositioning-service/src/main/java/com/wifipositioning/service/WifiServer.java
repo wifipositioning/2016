@@ -1,5 +1,6 @@
 package com.wifipositioning.service;
 
+import com.wifipositioning.service.handler.inbound.ServerIdleStateHandler;
 import com.wifipositioning.service.handler.inbound.ServerInboundHandler;
 import com.wifipositioning.service.handler.inbound.ServerMsgDecoder;
 import com.wifipositioning.service.handler.outbound.ServerMsgEncoder;
@@ -60,6 +61,8 @@ public class WifiServer
 
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
+				// 100s的读超时时间设置				
+				ch.pipeline().addLast(new ServerIdleStateHandler(10, 0, 0));
 				ch.pipeline().addLast(new ServerMsgDecoder());
 				ch.pipeline().addLast(new ServerInboundHandler());
 				ch.pipeline().addLast(new ServerMsgEncoder());

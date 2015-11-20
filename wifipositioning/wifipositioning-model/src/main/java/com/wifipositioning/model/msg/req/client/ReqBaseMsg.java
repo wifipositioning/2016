@@ -1,4 +1,4 @@
-package com.wifipositioning.model.msg.req;
+package com.wifipositioning.model.msg.req.client;
 
 import com.wifipositioning.model.msg.BaseMsg;
 

@@ -4,7 +4,7 @@ import com.wifipositioning.model.msg.resp.AskBaseMsg;
 import com.wifipositioning.model.msg.type.MsgType;
 
 /**
- * 连接建立响应消息
+ * 服务端连接建立响应消息
  * 
  * @author liuyujie
  *

@@ -1,12 +1,12 @@
 package com.wifipositioning.app.handler.outbound;
 
 import com.wifipositioning.app.utils.MacRssMappingString;
-import com.wifipositioning.model.msg.req.ReqBaseMsg;
-import com.wifipositioning.model.msg.req.impl.ConnectMsg;
-import com.wifipositioning.model.msg.req.impl.CreateDbMsg;
-import com.wifipositioning.model.msg.req.impl.DisconnectMsg;
-import com.wifipositioning.model.msg.req.impl.PingMsg;
-import com.wifipositioning.model.msg.req.impl.WifiPositioningMsg;
+import com.wifipositioning.model.msg.req.client.ReqBaseMsg;
+import com.wifipositioning.model.msg.req.client.impl.ConnectMsg;
+import com.wifipositioning.model.msg.req.client.impl.CreateDbMsg;
+import com.wifipositioning.model.msg.req.client.impl.DisconnectMsg;
+import com.wifipositioning.model.msg.req.client.impl.PingMsg;
+import com.wifipositioning.model.msg.req.client.impl.WifiPositioningMsg;
 import com.wifipositioning.model.msg.type.MsgType;
 
 import io.netty.buffer.ByteBuf;

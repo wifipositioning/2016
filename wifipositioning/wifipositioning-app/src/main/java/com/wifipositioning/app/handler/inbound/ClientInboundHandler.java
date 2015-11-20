@@ -5,8 +5,10 @@ import java.util.Map;
 
 import com.wifipositioning.app.ClientStateRecoder;
 import com.wifipositioning.app.ClientStateRecoder.ClientState;
-import com.wifipositioning.model.msg.req.impl.ConnectMsg;
-import com.wifipositioning.model.msg.req.impl.WifiPositioningMsg;
+import com.wifipositioning.model.msg.BaseMsg;
+import com.wifipositioning.model.msg.req.client.impl.ConnectMsg;
+import com.wifipositioning.model.msg.req.client.impl.PingMsg;
+import com.wifipositioning.model.msg.req.client.impl.WifiPositioningMsg;
 import com.wifipositioning.model.msg.resp.AskBaseMsg;
 import com.wifipositioning.model.msg.resp.impl.ConnectAskMsg;
 import com.wifipositioning.model.msg.resp.impl.CreateDbAskMsg;
@@ -28,9 +30,9 @@ public class ClientInboundHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		// 首次建立连接		
+		System.out.println("====in channelActive Method====" + clientId);
 		SocketChannel channel = (SocketChannel) ctx.channel();
 		ConnectMsg connectMsg = new ConnectMsg(clientId);
-		System.out.println("====in channelActive Method====" + clientId);
 		channel.writeAndFlush(connectMsg);
 		super.channelActive(ctx);
 	}
@@ -39,9 +41,14 @@ public class ClientInboundHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		// 消息读取		
 		System.out.println("in channelRead Method");
-		AskBaseMsg askBaseMsg = (AskBaseMsg) msg;
-		byte msgType = askBaseMsg.getMsgType();
-		boolean isSuccess = askBaseMsg.isSuccess();
+		BaseMsg baseMsg = (BaseMsg) msg;
+		byte msgType = baseMsg.getMsgType();
+		boolean isSuccess = true;
+		// 不是PING消息，则是服务端响应反馈信息		
+		if(msgType != MsgType.PING){
+			AskBaseMsg askBaseMsg = (AskBaseMsg)msg;
+			isSuccess = askBaseMsg.isSuccess();
+		}
 		
 		switch (msgType) {
 		case MsgType.POSITIONING_ASK:
@@ -70,6 +77,11 @@ public class ClientInboundHandler extends ChannelInboundHandlerAdapter {
 				// 需要重新发送				
 			}
 			break;
+		case MsgType.PING:
+			System.out.println("==== 客户端 收到 服务端 发送的心跳检测信息 ====");
+			PingMsg pingMsg = new PingMsg(clientId);
+			ctx.channel().writeAndFlush(pingMsg);
+			break;
 		case MsgType.CONNECT_ASK:
 			System.out.println("==== 客户端 收到 服务端 发送的连接响应信息 ====");
 			ConnectAskMsg connectAskMsg = (ConnectAskMsg) msg;
@@ -81,9 +93,16 @@ public class ClientInboundHandler extends ChannelInboundHandlerAdapter {
 				
 //				testCreateDb(ctx);
 			}
+			// 失败重连			
 			else{
 				ClientStateRecoder.setClientState(ClientState.F_CONNECT);
+				System.out.println("连接失败");
 				System.out.println(connectAskMsg.getMessage());
+				System.out.println("尝试重新连接");
+				// 休眠3s在重新连接				
+				Thread.sleep(3000);
+				ConnectMsg connectMsg = new ConnectMsg(clientId);
+				ctx.channel().writeAndFlush(connectMsg);
 			}
 			break;
 		default:

@@ -4,9 +4,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.wifipositioning.model.msg.req.ReqBaseMsg;
-import com.wifipositioning.model.msg.req.impl.CreateDbMsg;
-import com.wifipositioning.model.msg.req.impl.WifiPositioningMsg;
+import com.wifipositioning.model.msg.req.client.ReqBaseMsg;
+import com.wifipositioning.model.msg.req.client.impl.CreateDbMsg;
+import com.wifipositioning.model.msg.req.client.impl.WifiPositioningMsg;
+import com.wifipositioning.model.msg.req.server.PingMsg;
 import com.wifipositioning.model.msg.resp.impl.ConnectAskMsg;
 import com.wifipositioning.model.msg.resp.impl.CreateDbAskMsg;
 import com.wifipositioning.model.msg.resp.impl.WifiPositioningAskMsg;
@@ -16,6 +17,8 @@ import com.wifipositioning.service.channel.ChannelWrapper;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 
 /**
  * Server端的Inbound Handler
@@ -27,9 +30,18 @@ import io.netty.channel.socket.SocketChannel;
  */
 public class ServerInboundHandler extends ChannelInboundHandlerAdapter {
 
+	/**
+	 * ping次数，连续ping次数超过3次，自动结束连接
+	 */
+	private int pingTimes = 0;
+	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		System.out.println("===in channelRead Method====");
+		
+		// 收到消息自动清零		
+		pingTimes = 0;
+		
 		ReqBaseMsg reqBaseMsg = (ReqBaseMsg) msg;
 		String clientId = reqBaseMsg.getClientId();
 		byte msgType = reqBaseMsg.getMsgType();
@@ -80,7 +92,7 @@ public class ServerInboundHandler extends ChannelInboundHandlerAdapter {
 				channel.writeAndFlush(createDbAskMsg);
 			}
 			else if(msgType == MsgType.PING){
-				System.out.println("Ping from client");
+				System.out.println("==== 服务端 收到 客户端 发送的Ping心跳检测信息 ====");
 			}
 			else if(msgType == MsgType.CONNECT){
 				// 多次连接不响应				
@@ -105,14 +117,45 @@ public class ServerInboundHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-		
-		super.userEventTriggered(ctx, evt);
+		System.out.println("userEventTriggered");
+		if (IdleStateEvent.class.isAssignableFrom(evt.getClass())) {
+			IdleStateEvent event = (IdleStateEvent) evt;
+			if (event.state() == IdleState.READER_IDLE){
+				// 连续PING次数大于3， 释放连接				
+				if(pingTimes >= 3){
+					releaseDeadConnection(ctx);
+					return;
+				}
+				System.out.println("====读空闲超时，服务端发起心跳检测====");
+				PingMsg pingMsg = new PingMsg();
+				ctx.channel().writeAndFlush(pingMsg);
+				pingTimes++;
+			}
+			// 写空闲被忽略			
+//			else if (event.state() == IdleState.WRITER_IDLE){
+//				
+//			}
+//			else if (event.state() == IdleState.ALL_IDLE){
+//				
+//			}
+		}
 	}
-
+	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		System.out.println(cause.getMessage());
-//		super.exceptionCaught(ctx, cause);
+		super.exceptionCaught(ctx, cause);
+	}
+	
+	/**
+	 * 释放不能获取心跳的客户端连接
+	 */
+	private void releaseDeadConnection(ChannelHandlerContext ctx){
+		System.out.println("===释放心跳检测失败的客户端连接===");
+		SocketChannel channel = (SocketChannel) ctx.channel();
+		ChannelWrapper.removeChannel(channel);
+		channel.close();
+		ctx.close();
 	}
 
 }

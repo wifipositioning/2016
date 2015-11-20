@@ -3,6 +3,7 @@ package com.wifipositioning.app.handler.inbound;
 import java.util.List;
 
 import com.wifipositioning.app.ClientMsgState;
+import com.wifipositioning.model.msg.req.server.PingMsg;
 import com.wifipositioning.model.msg.resp.impl.ConnectAskMsg;
 import com.wifipositioning.model.msg.resp.impl.CreateDbAskMsg;
 import com.wifipositioning.model.msg.resp.impl.WifiPositioningAskMsg;
@@ -61,7 +62,13 @@ public class ClientMsgDecoder extends ReplayingDecoder<ClientMsgState> {
 		switch (state()) {
 		case MSG_TYPE:
 			msgType = in.readByte();
-			checkpoint(ClientMsgState.IS_SUCCESS);
+			if(msgType == MsgType.PING){
+				checkpoint(ClientMsgState.END);
+			}
+			else{
+				checkpoint(ClientMsgState.IS_SUCCESS);
+			}
+			break;
 		case IS_SUCCESS:
 			isSuccess = in.readBoolean();
 			checkpoint(ClientMsgState.MESSAGE_LENGTH);
@@ -103,6 +110,11 @@ public class ClientMsgDecoder extends ReplayingDecoder<ClientMsgState> {
 				System.out.println("==== 客户端 解析 服务端 发送的建库响应码流 ====");
 				CreateDbAskMsg createDbAskMsg = messageLength <= 0 ? new CreateDbAskMsg(isSuccess) : new CreateDbAskMsg(isSuccess, message);
 				out.add(createDbAskMsg);
+			}
+			else if(msgType == MsgType.PING){
+				System.out.println("==== 客户端 解析 服务端 发送的心跳码流 ====");
+				PingMsg pingMsg = new PingMsg();
+				out.add(pingMsg);
 			}
 			else if(msgType == MsgType.CONNECT_ASK){
 				System.out.println("==== 客户端 解析 服务端 发送的连接响应码流 ====");

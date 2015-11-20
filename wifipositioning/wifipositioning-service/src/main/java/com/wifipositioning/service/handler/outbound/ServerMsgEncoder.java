@@ -1,5 +1,6 @@
 package com.wifipositioning.service.handler.outbound;
 
+import com.wifipositioning.model.msg.BaseMsg;
 import com.wifipositioning.model.msg.resp.AskBaseMsg;
 import com.wifipositioning.model.msg.resp.impl.WifiPositioningAskMsg;
 import com.wifipositioning.model.msg.type.MsgType;
@@ -16,26 +17,31 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @author liuyujie
  *
  */
-public class ServerMsgEncoder extends MessageToByteEncoder<AskBaseMsg> {
+public class ServerMsgEncoder extends MessageToByteEncoder<BaseMsg> {
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, AskBaseMsg msg, ByteBuf out) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, BaseMsg msg, ByteBuf out) throws Exception {
 		
 		byte msgType = msg.getMsgType();
-		boolean isSuccess = msg.isSuccess();
 		
 		out.writeByte(msgType);
-		out.writeBoolean(isSuccess);
-		
-		int messageLength = msg.getMessageLength();
-		out.writeInt(messageLength);
-		
-		String message = msg.getMessage();
-		// 有消息体		
-		if(messageLength !=0 && message != null){
-			out.writeBytes(message.getBytes());
+		// 不是PING消息，则为响应消息		
+		if(msgType != MsgType.PING){
+			AskBaseMsg askMsg = (AskBaseMsg) msg;
+			boolean isSuccess = askMsg.isSuccess();
+			
+			out.writeBoolean(isSuccess);
+			
+			int messageLength = askMsg.getMessageLength();
+			out.writeInt(messageLength);
+			
+			String message = askMsg.getMessage();
+			// 有消息体		
+			if(messageLength !=0 && message != null){
+				out.writeBytes(message.getBytes());
+			}
 		}
-		
+
 		if(msgType == MsgType.POSITIONING_ASK){
 			System.out.println("==== 服务端 发送定位响应到 客户端 ====");
 			WifiPositioningAskMsg wpAskMsg = (WifiPositioningAskMsg)msg; 
@@ -44,6 +50,9 @@ public class ServerMsgEncoder extends MessageToByteEncoder<AskBaseMsg> {
 		}
 		else if(msgType == MsgType.CREATE_DB_ASK){
 			System.out.println("==== 服务端 发送建库响应到 客户端 ====");
+		}
+		else if(msgType == MsgType.PING){
+			System.out.println("==== 服务端 发送心跳检测到 客户端 ====");
 		}
 		else if(msgType == MsgType.CONNECT_ASK){
 			System.out.println("==== 服务端 发送连接响应到 客户端 ====");

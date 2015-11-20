@@ -1,10 +1,10 @@
-package com.wifipositioning.model.msg.req.impl;
+package com.wifipositioning.model.msg.req.client.impl;
 
-import com.wifipositioning.model.msg.req.ReqBaseMsg;
+import com.wifipositioning.model.msg.req.client.ReqBaseMsg;
 import com.wifipositioning.model.msg.type.MsgType;
 
 /**
- * 心跳消息
+ * 客户端心跳消息
  * 
  * @author liuyujie
  *

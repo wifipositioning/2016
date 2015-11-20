@@ -1,13 +1,13 @@
-package com.wifipositioning.model.msg.req.impl;
+package com.wifipositioning.model.msg.req.client.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wifipositioning.model.msg.req.ReqBaseMsg;
+import com.wifipositioning.model.msg.req.client.ReqBaseMsg;
 import com.wifipositioning.model.msg.type.MsgType;
 
 /**
- * wifi定位请求信息
+ * 客户端wifi定位请求信息
  * 
  * @author liuyujie
  *
